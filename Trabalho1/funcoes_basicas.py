@@ -104,5 +104,29 @@ def falsa_posicao(f, a, b, tol = 1e-6, max_iter = 100):
 
 ################################################################################################################################
 
-def newton_raphson():
-    print("aaaaa")
+def newton_raphson(f, df, x0, tol = 1e-6, max_iter = 100):
+    # inicia a lista de valores com x0
+    x_values = [x0]
+        
+    for i in range(max_iter):
+        # verifica se a derivada é próxima de 0, para evitar uma possível divisão por 0
+        if np.abs(df(x0)) < 1e-12:
+            print(f"Divisão muito próxima de 0. A última aproximação foi {x0}")
+            return x0, x_values
+        
+        # atualiza o valor de xplus1
+        xPlus1 = x0-f(x0)/df(x0)
+        # adiciona o valor de xk+1 à lista
+        x_values.append(xPlus1)
+
+        # se o valor encontrado está abaixo da tolerância
+        if np.abs(f(xPlus1)) < tol:
+            print(f"Raiz encontrada em {xPlus1} após {i+1} iterações.")
+            return xPlus1, x_values
+
+        # atualiza x0
+        x0 = xPlus1
+        
+    # caso não tenha sido encontrado um valor dentro da tolerância
+    print(f"O método não convergiu após {max_iter} iterações. A última aproximação foi {xPlus1}")
+    return xPlus1, x_values
