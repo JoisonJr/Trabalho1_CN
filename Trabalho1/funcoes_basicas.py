@@ -130,3 +130,26 @@ def newton_raphson(f, df, x0, tol = 1e-6, max_iter = 100):
     # caso não tenha sido encontrado um valor dentro da tolerância
     print(f"O método não convergiu após {max_iter} iterações. A última aproximação foi {xPlus1}")
     return xPlus1, x_values
+
+################################################################################################################################
+
+def metodo_secante(f, x0, x1, tol=1e-6, max_iter=100):
+    """
+    Método da Secante para encontrar raízes de f(x).
+    Retorna (raiz_aproximada ou None, lista_iteracoes).
+    """
+    iterates = [x0, x1]
+    for i in range(max_iter):
+        f_x0 = f(x0)
+        f_x1 = f(x1)
+        if f_x1 - f_x0 == 0:
+            print("Divisão por zero na secante. Método falhou.")
+            return None, iterates
+        x2 = (x0 * f_x1 - x1 * f_x0) / (f_x1 - f_x0)
+        iterates.append(x2)
+        if abs((x2 - x1)/x2) <= tol and abs(f(x2)) <= tol:
+            print(f"Secante convergiu para {x2} em {i+1} iterações.")
+            return x2, iterates
+        x0, x1 = x1, x2
+    print(f"Secante não convergiu após {max_iter} iterações. Última aproximação {x2}")
+    return x2, iterates
